@@ -25,6 +25,10 @@ export default {
       default: 0,
     },
     popperClass: String,
+    /**
+     * 显示的内容，也可以通过 slot#content 传入 DOM
+     * @show
+     */
     content: String,
     visibleArrow: {
       default: true,
