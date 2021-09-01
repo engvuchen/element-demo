@@ -102,6 +102,10 @@ export default {
       type: String,
       default: 'vertical'
     },
+    /**
+     * 当前激活菜单的 index
+     * @show
+     */
     defaultActive: {
       type: String,
       default: ''
