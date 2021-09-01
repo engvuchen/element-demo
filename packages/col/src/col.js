@@ -2,13 +2,17 @@ export default {
   name: 'ElCol',
 
   props: {
+    /**
+     * 栅格占据的列数
+     * @show
+     */
     span: {
       type: Number,
-      default: 24
+      default: 24,
     },
     tag: {
       type: String,
-      default: 'div'
+      default: 'div',
     },
     offset: Number,
     pull: Number,
@@ -17,7 +21,7 @@ export default {
     sm: [Number, Object],
     md: [Number, Object],
     lg: [Number, Object],
-    xl: [Number, Object]
+    xl: [Number, Object],
   },
 
   computed: {
@@ -27,7 +31,7 @@ export default {
         parent = parent.$parent;
       }
       return parent ? parent.gutter : 0;
-    }
+    },
   },
   render(h) {
     let classList = [];
@@ -40,11 +44,7 @@ export default {
 
     ['span', 'offset', 'pull', 'push'].forEach(prop => {
       if (this[prop] || this[prop] === 0) {
-        classList.push(
-          prop !== 'span'
-            ? `el-col-${prop}-${this[prop]}`
-            : `el-col-${this[prop]}`
-        );
+        classList.push(prop !== 'span' ? `el-col-${prop}-${this[prop]}` : `el-col-${this[prop]}`);
       }
     });
 
@@ -54,18 +54,18 @@ export default {
       } else if (typeof this[size] === 'object') {
         let props = this[size];
         Object.keys(props).forEach(prop => {
-          classList.push(
-            prop !== 'span'
-              ? `el-col-${size}-${prop}-${props[prop]}`
-              : `el-col-${size}-${props[prop]}`
-          );
+          classList.push(prop !== 'span' ? `el-col-${size}-${prop}-${props[prop]}` : `el-col-${size}-${props[prop]}`);
         });
       }
     });
 
-    return h(this.tag, {
-      class: ['el-col', classList],
-      style
-    }, this.$slots.default);
-  }
+    return h(
+      this.tag,
+      {
+        class: ['el-col', classList],
+        style,
+      },
+      this.$slots.default
+    );
+  },
 };
