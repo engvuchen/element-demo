@@ -135,6 +135,10 @@ export default {
   },
 
   props: {
+    /**
+     * 绑定值
+     * @show
+     */
     value: [String, Number],
     size: String,
     resize: String,
