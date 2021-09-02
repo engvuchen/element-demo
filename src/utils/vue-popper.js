@@ -1,9 +1,7 @@
 import Vue from 'vue';
-import {
-  PopupManager
-} from 'element-ui/src/utils/popup';
+import { PopupManager } from 'element-demo/src/utils/popup';
 
-const PopperJS = Vue.prototype.$isServer ? function() {} : require('./popper');
+const PopperJS = Vue.prototype.$isServer ? function () {} : require('./popper');
 const stop = e => e.stopPropagation();
 
 /**
@@ -18,45 +16,45 @@ export default {
   props: {
     transformOrigin: {
       type: [Boolean, String],
-      default: true
+      default: true,
     },
     placement: {
       type: String,
-      default: 'bottom'
+      default: 'bottom',
     },
     boundariesPadding: {
       type: Number,
-      default: 5
+      default: 5,
     },
     reference: {},
     popper: {},
     offset: {
-      default: 0
+      default: 0,
     },
     value: Boolean,
     visibleArrow: Boolean,
     arrowOffset: {
       type: Number,
-      default: 35
+      default: 35,
     },
     appendToBody: {
       type: Boolean,
-      default: true
+      default: true,
     },
     popperOptions: {
       type: Object,
       default() {
         return {
-          gpuAcceleration: false
+          gpuAcceleration: false,
         };
-      }
-    }
+      },
+    },
   },
 
   data() {
     return {
       showPopper: false,
-      currentPlacement: ''
+      currentPlacement: '',
     };
   },
 
@@ -66,14 +64,14 @@ export default {
       handler(val) {
         this.showPopper = val;
         this.$emit('input', val);
-      }
+      },
     },
 
     showPopper(val) {
       if (this.disabled) return;
       val ? this.updatePopper() : this.destroyPopper();
       this.$emit('input', val);
-    }
+    },
   },
 
   methods: {
@@ -85,12 +83,10 @@ export default {
       }
 
       const options = this.popperOptions;
-      const popper = this.popperElm = this.popperElm || this.popper || this.$refs.popper;
-      let reference = this.referenceElm = this.referenceElm || this.reference || this.$refs.reference;
+      const popper = (this.popperElm = this.popperElm || this.popper || this.$refs.popper);
+      let reference = (this.referenceElm = this.referenceElm || this.reference || this.$refs.reference);
 
-      if (!reference &&
-        this.$slots.reference &&
-        this.$slots.reference[0]) {
+      if (!reference && this.$slots.reference && this.$slots.reference[0]) {
         reference = this.referenceElm = this.$slots.reference[0].elm;
       }
 
@@ -148,13 +144,16 @@ export default {
         top: 'bottom',
         bottom: 'top',
         left: 'right',
-        right: 'left'
+        right: 'left',
       };
       let placement = this.popperJS._popper.getAttribute('x-placement').split('-')[0];
       let origin = placementMap[placement];
-      this.popperJS._popper.style.transformOrigin = typeof this.transformOrigin === 'string'
-        ? this.transformOrigin
-        : ['top', 'bottom'].indexOf(placement) > -1 ? `center ${ origin }` : `${ origin } center`;
+      this.popperJS._popper.style.transformOrigin =
+        typeof this.transformOrigin === 'string'
+          ? this.transformOrigin
+          : ['top', 'bottom'].indexOf(placement) > -1
+          ? `center ${origin}`
+          : `${origin} center`;
     },
 
     appendArrow(element) {
@@ -180,7 +179,7 @@ export default {
       arrow.setAttribute('x-arrow', '');
       arrow.className = 'popper__arrow';
       element.appendChild(arrow);
-    }
+    },
   },
 
   beforeDestroy() {
@@ -194,5 +193,5 @@ export default {
   // call destroy in keep-alive mode
   deactivated() {
     this.$options.beforeDestroy[0].call(this);
-  }
+  },
 };

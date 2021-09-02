@@ -88,8 +88,8 @@ import Empty from '../packages/empty/index.js';
 import Descriptions from '../packages/descriptions/index.js';
 import DescriptionsItem from '../packages/descriptions-item/index.js';
 import Result from '../packages/result/index.js';
-import locale from 'element-ui/src/locale';
-import CollapseTransition from 'element-ui/src/transitions/collapse-transition';
+import locale from 'element-demo/src/locale';
+import CollapseTransition from 'element-demo/src/transitions/collapse-transition';
 
 const components = [
   Pagination,
@@ -175,10 +175,10 @@ const components = [
   Descriptions,
   DescriptionsItem,
   Result,
-  CollapseTransition
+  CollapseTransition,
 ];
 
-const install = function(Vue, opts = {}) {
+const install = function (Vue, opts = {}) {
   locale.use(opts.locale);
   locale.i18n(opts.i18n);
 
@@ -191,7 +191,7 @@ const install = function(Vue, opts = {}) {
 
   Vue.prototype.$ELEMENT = {
     size: opts.size || '',
-    zIndex: opts.zIndex || 2000
+    zIndex: opts.zIndex || 2000,
   };
 
   Vue.prototype.$loading = Loading.service;
@@ -201,7 +201,6 @@ const install = function(Vue, opts = {}) {
   Vue.prototype.$prompt = MessageBox.prompt;
   Vue.prototype.$notify = Notification;
   Vue.prototype.$message = Message;
-
 };
 
 /* istanbul ignore if */
@@ -302,5 +301,5 @@ export default {
   Empty,
   Descriptions,
   DescriptionsItem,
-  Result
+  Result,
 };

@@ -1,17 +1,13 @@
 <template>
   <div
     ref="reference"
-    :class="[
-      'el-cascader',
-      realSize && `el-cascader--${realSize}`,
-      { 'is-disabled': isDisabled }
-    ]"
+    :class="['el-cascader', realSize && `el-cascader--${realSize}`, { 'is-disabled': isDisabled }]"
     v-clickoutside="() => toggleDropDownVisible(false)"
     @mouseenter="inputHover = true"
     @mouseleave="inputHover = false"
     @click="() => toggleDropDownVisible(readonly ? undefined : true)"
-    @keydown="handleKeyDown">
-
+    @keydown="handleKeyDown"
+  >
     <el-input
       ref="input"
       v-model="multiple ? presentText : inputValue"
@@ -23,22 +19,16 @@
       :class="{ 'is-focus': dropDownVisible }"
       @focus="handleFocus"
       @blur="handleBlur"
-      @input="handleInput">
+      @input="handleInput"
+    >
       <template slot="suffix">
-        <i
-          v-if="clearBtnVisible"
-          key="clear"
-          class="el-input__icon el-icon-circle-close"
-          @click.stop="handleClear"></i>
+        <i v-if="clearBtnVisible" key="clear" class="el-input__icon el-icon-circle-close" @click.stop="handleClear"></i>
         <i
           v-else
           key="arrow-down"
-          :class="[
-            'el-input__icon',
-            'el-icon-arrow-down',
-            dropDownVisible && 'is-reverse'
-          ]"
-          @click.stop="toggleDropDownVisible()"></i>
+          :class="['el-input__icon', 'el-icon-arrow-down', dropDownVisible && 'is-reverse']"
+          @click.stop="toggleDropDownVisible()"
+        ></i>
       </template>
     </el-input>
 
@@ -51,7 +41,8 @@
         :hit="tag.hitState"
         :closable="tag.closable"
         disable-transitions
-        @close="deleteTag(tag)">
+        @close="deleteTag(tag)"
+      >
         <span>{{ tag.text }}</span>
       </el-tag>
       <input
@@ -62,14 +53,12 @@
         :placeholder="presentTags.length ? '' : placeholder"
         @input="e => handleInput(inputValue, e)"
         @click.stop="toggleDropDownVisible(true)"
-        @keydown.delete="handleDelete">
+        @keydown.delete="handleDelete"
+      />
     </div>
 
     <transition name="el-zoom-in-top" @after-leave="handleDropdownLeave">
-      <div
-        v-show="dropDownVisible"
-        ref="popper"
-        :class="['el-popper', 'el-cascader__dropdown', popperClass]">
+      <div v-show="dropDownVisible" ref="popper" :class="['el-popper', 'el-cascader__dropdown', popperClass]">
         <el-cascader-panel
           ref="panel"
           v-show="!filtering"
@@ -79,7 +68,8 @@
           :border="false"
           :render-label="$scopedSlots.default"
           @expand-change="handleExpandChange"
-          @close="toggleDropDownVisible(false)"></el-cascader-panel>
+          @close="toggleDropDownVisible(false)"
+        ></el-cascader-panel>
         <el-scrollbar
           ref="suggestionPanel"
           v-if="filterable"
@@ -87,17 +77,16 @@
           tag="ul"
           class="el-cascader__suggestion-panel"
           view-class="el-cascader__suggestion-list"
-          @keydown.native="handleSuggestionKeyDown">
+          @keydown.native="handleSuggestionKeyDown"
+        >
           <template v-if="suggestions.length">
             <li
               v-for="(item, index) in suggestions"
               :key="item.uid"
-              :class="[
-                'el-cascader__suggestion-item',
-                item.checked && 'is-checked'
-              ]"
+              :class="['el-cascader__suggestion-item', item.checked && 'is-checked']"
               :tabindex="-1"
-              @click="handleSuggestionClick(index)">
+              @click="handleSuggestionClick(index)"
+            >
               <span>{{ item.text }}</span>
               <i v-if="item.checked" class="el-icon-check"></i>
             </li>
@@ -112,64 +101,64 @@
 </template>
 
 <script>
-import Popper from 'element-ui/src/utils/vue-popper';
-import Clickoutside from 'element-ui/src/utils/clickoutside';
-import Emitter from 'element-ui/src/mixins/emitter';
-import Locale from 'element-ui/src/mixins/locale';
-import Migrating from 'element-ui/src/mixins/migrating';
-import ElInput from 'element-ui/packages/input';
-import ElTag from 'element-ui/packages/tag';
-import ElScrollbar from 'element-ui/packages/scrollbar';
-import ElCascaderPanel from 'element-ui/packages/cascader-panel';
-import AriaUtils from 'element-ui/src/utils/aria-utils';
-import { t } from 'element-ui/src/locale';
-import { isEqual, isEmpty, kebabCase } from 'element-ui/src/utils/util';
-import { isUndefined, isFunction } from 'element-ui/src/utils/types';
-import { isDef } from 'element-ui/src/utils/shared';
-import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import Popper from 'element-demo/src/utils/vue-popper';
+import Clickoutside from 'element-demo/src/utils/clickoutside';
+import Emitter from 'element-demo/src/mixins/emitter';
+import Locale from 'element-demo/src/mixins/locale';
+import Migrating from 'element-demo/src/mixins/migrating';
+import ElInput from 'element-demo/packages/input';
+import ElTag from 'element-demo/packages/tag';
+import ElScrollbar from 'element-demo/packages/scrollbar';
+import ElCascaderPanel from 'element-demo/packages/cascader-panel';
+import AriaUtils from 'element-demo/src/utils/aria-utils';
+import { t } from 'element-demo/src/locale';
+import { isEqual, isEmpty, kebabCase } from 'element-demo/src/utils/util';
+import { isUndefined, isFunction } from 'element-demo/src/utils/types';
+import { isDef } from 'element-demo/src/utils/shared';
+import { addResizeListener, removeResizeListener } from 'element-demo/src/utils/resize-event';
 import debounce from 'throttle-debounce/debounce';
 
 const { keys: KeyCode } = AriaUtils;
 const MigratingProps = {
   expandTrigger: {
     newProp: 'expandTrigger',
-    type: String
+    type: String,
   },
   changeOnSelect: {
     newProp: 'checkStrictly',
-    type: Boolean
+    type: Boolean,
   },
   hoverThreshold: {
     newProp: 'hoverThreshold',
-    type: Number
-  }
+    type: Number,
+  },
 };
 
 const PopperMixin = {
   props: {
     placement: {
       type: String,
-      default: 'bottom-start'
+      default: 'bottom-start',
     },
     appendToBody: Popper.props.appendToBody,
     visibleArrow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     arrowOffset: Popper.props.arrowOffset,
     offset: Popper.props.offset,
     boundariesPadding: Popper.props.boundariesPadding,
-    popperOptions: Popper.props.popperOptions
+    popperOptions: Popper.props.popperOptions,
   },
   methods: Popper.methods,
   data: Popper.data,
-  beforeDestroy: Popper.beforeDestroy
+  beforeDestroy: Popper.beforeDestroy,
 };
 
 const InputSizeMap = {
   medium: 36,
   small: 32,
-  mini: 28
+  mini: 28,
 };
 
 export default {
@@ -181,18 +170,18 @@ export default {
 
   inject: {
     elForm: {
-      default: ''
+      default: '',
     },
     elFormItem: {
-      default: ''
-    }
+      default: '',
+    },
   },
 
   components: {
     ElInput,
     ElTag,
     ElScrollbar,
-    ElCascaderPanel
+    ElCascaderPanel,
   },
 
   props: {
@@ -202,7 +191,7 @@ export default {
     size: String,
     placeholder: {
       type: String,
-      default: () => t('el.cascader.placeholder')
+      default: () => t('el.cascader.placeholder'),
     },
     disabled: Boolean,
     clearable: Boolean,
@@ -210,22 +199,22 @@ export default {
     filterMethod: Function,
     separator: {
       type: String,
-      default: ' / '
+      default: ' / ',
     },
     showAllLevels: {
       type: Boolean,
-      default: true
+      default: true,
     },
     collapseTags: Boolean,
     debounce: {
       type: Number,
-      default: 300
+      default: 300,
     },
     beforeFilter: {
       type: Function,
-      default: () => (() => {})
+      default: () => () => {},
     },
-    popperClass: String
+    popperClass: String,
   },
 
   data() {
@@ -240,7 +229,7 @@ export default {
       filtering: false,
       suggestions: [],
       inputInitialHeight: 0,
-      pressDeleteCount: 0
+      pressDeleteCount: 0,
     };
   },
 
@@ -250,9 +239,7 @@ export default {
       return this.size || _elFormItemSize || (this.$ELEMENT || {}).size;
     },
     tagSize() {
-      return ['small', 'mini'].indexOf(this.realSize) > -1
-        ? 'mini'
-        : 'small';
+      return ['small', 'mini'].indexOf(this.realSize) > -1 ? 'mini' : 'small';
     },
     isDisabled() {
       return this.disabled || (this.elForm || {}).disabled;
@@ -261,18 +248,16 @@ export default {
       const config = this.props || {};
       const { $attrs } = this;
 
-      Object
-        .keys(MigratingProps)
-        .forEach(oldProp => {
-          const { newProp, type } = MigratingProps[oldProp];
-          let oldValue = $attrs[oldProp] || $attrs[kebabCase(oldProp)];
-          if (isDef(oldProp) && !isDef(config[newProp])) {
-            if (type === Boolean && oldValue === '') {
-              oldValue = true;
-            }
-            config[newProp] = oldValue;
+      Object.keys(MigratingProps).forEach(oldProp => {
+        const { newProp, type } = MigratingProps[oldProp];
+        let oldValue = $attrs[oldProp] || $attrs[kebabCase(oldProp)];
+        if (isDef(oldProp) && !isDef(config[newProp])) {
+          if (type === Boolean && oldValue === '') {
+            oldValue = true;
           }
-        });
+          config[newProp] = oldValue;
+        }
+      });
 
       return config;
     },
@@ -290,13 +275,11 @@ export default {
         return false;
       }
 
-      return this.multiple
-        ? !!this.checkedNodes.filter(node => !node.isDisabled).length
-        : !!this.presentText;
+      return this.multiple ? !!this.checkedNodes.filter(node => !node.isDisabled).length : !!this.presentText;
     },
     panel() {
       return this.$refs.panel;
-    }
+    },
   },
 
   watch: {
@@ -326,10 +309,10 @@ export default {
       }
     },
     options: {
-      handler: function() {
+      handler: function () {
         this.$nextTick(this.computePresentContent);
       },
-      deep: true
+      deep: true,
     },
     presentText(val) {
       this.inputValue = val;
@@ -341,7 +324,7 @@ export default {
     },
     filtering(val) {
       this.$nextTick(this.updatePopper);
-    }
+    },
   },
 
   mounted() {
@@ -385,11 +368,11 @@ export default {
         props: {
           'expand-trigger': 'expand-trigger is removed, use `props.expandTrigger` instead.',
           'change-on-select': 'change-on-select is removed, use `props.checkStrictly` instead.',
-          'hover-threshold': 'hover-threshold is removed, use `props.hoverThreshold` instead'
+          'hover-threshold': 'hover-threshold is removed, use `props.hoverThreshold` instead',
         },
         events: {
-          'active-item-change': 'active-item-change is renamed to expand-change'
-        }
+          'active-item-change': 'active-item-change is renamed to expand-change',
+        },
       };
     },
     toggleDropDownVisible(visible) {
@@ -514,7 +497,7 @@ export default {
         key: node.uid,
         text: node.getText(showAllLevels, separator),
         hitState: false,
-        closable: !isDisabled && !node.isDisabled
+        closable: !isDisabled && !node.isDisabled,
       });
 
       if (checkedNodes.length) {
@@ -527,7 +510,7 @@ export default {
             tags.push({
               key: -1,
               text: `+ ${restCount}`,
-              closable: false
+              closable: false,
             });
           } else {
             rest.forEach(node => tags.push(genTag(node)));
@@ -545,12 +528,11 @@ export default {
         filterMethod = (node, keyword) => node.text.includes(keyword);
       }
 
-      const suggestions = this.panel.getFlattedNodes(this.leafOnly)
-        .filter(node => {
-          if (node.isDisabled) return false;
-          node.text = node.getText(this.showAllLevels, this.separator) || '';
-          return filterMethod(node, this.inputValue);
-        });
+      const suggestions = this.panel.getFlattedNodes(this.leafOnly).filter(node => {
+        if (node.isDisabled) return false;
+        node.text = node.getText(this.showAllLevels, this.separator) || '';
+        return filterMethod(node, this.inputValue);
+      });
 
       if (this.multiple) {
         this.presentTags.forEach(tag => {
@@ -649,11 +631,10 @@ export default {
 
     /**
      * public methods
-    */
+     */
     getCheckedNodes(leafOnly) {
       return this.panel.getCheckedNodes(leafOnly);
-    }
-  }
+    },
+  },
 };
 </script>
-

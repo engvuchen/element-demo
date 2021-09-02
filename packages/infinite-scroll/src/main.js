@@ -1,13 +1,6 @@
 import throttle from 'throttle-debounce/debounce';
-import {
-  isHtmlElement,
-  isFunction,
-  isUndefined,
-  isDefined
-} from 'element-ui/src/utils/types';
-import {
-  getScrollContainer
-} from 'element-ui/src/utils/dom';
+import { isHtmlElement, isFunction, isUndefined, isDefined } from 'element-demo/src/utils/types';
+import { getScrollContainer } from 'element-demo/src/utils/dom';
 
 const getStyleComputedProperty = (element, property) => {
   if (element === window) {
@@ -22,15 +15,12 @@ const getStyleComputedProperty = (element, property) => {
   return property ? css[property] : css;
 };
 
-const entries = (obj) => {
-  return Object.keys(obj || {})
-    .map(key => ([key, obj[key]]));
+const entries = obj => {
+  return Object.keys(obj || {}).map(key => [key, obj[key]]);
 };
 
 const getPositionSize = (el, prop) => {
-  return el === window || el === document
-    ? document.documentElement[prop]
-    : el[prop];
+  return el === window || el === document ? document.documentElement[prop] : el[prop];
 };
 
 const getOffsetHeight = el => {
@@ -45,20 +35,20 @@ const scope = 'ElInfiniteScroll';
 const attributes = {
   delay: {
     type: Number,
-    default: 200
+    default: 200,
   },
   distance: {
     type: Number,
-    default: 0
+    default: 0,
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   immediate: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 };
 
 const getScrollOptions = (el, vm) => {
@@ -74,7 +64,7 @@ const getScrollOptions = (el, vm) => {
         value = Number.isNaN(value) ? defaultValue : value;
         break;
       case Boolean:
-        value = isDefined(value) ? value === 'false' ? false : Boolean(value) : defaultValue;
+        value = isDefined(value) ? (value === 'false' ? false : Boolean(value)) : defaultValue;
         break;
       default:
         value = type(value);
@@ -86,7 +76,7 @@ const getScrollOptions = (el, vm) => {
 
 const getElementTop = el => el.getBoundingClientRect().top;
 
-const handleScroll = function(cb) {
+const handleScroll = function (cb) {
   const { el, vm, container, observer } = this[scope];
   const { distance, disabled } = getScrollOptions(el, vm);
 
@@ -114,7 +104,6 @@ const handleScroll = function(cb) {
     observer.disconnect();
     this[scope].observer = null;
   }
-
 };
 
 export default {
@@ -134,7 +123,7 @@ export default {
       container.addEventListener('scroll', onScroll);
 
       if (immediate) {
-        const observer = el[scope].observer = new MutationObserver(onScroll);
+        const observer = (el[scope].observer = new MutationObserver(onScroll));
         observer.observe(container, { childList: true, subtree: true });
         onScroll();
       }
@@ -145,6 +134,5 @@ export default {
     if (container) {
       container.removeEventListener('scroll', onScroll);
     }
-  }
+  },
 };
-

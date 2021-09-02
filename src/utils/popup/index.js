@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import merge from 'element-ui/src/utils/merge';
-import PopupManager from 'element-ui/src/utils/popup/popup-manager';
+import merge from 'element-demo/src/utils/merge';
+import PopupManager from 'element-demo/src/utils/popup/popup-manager';
 import getScrollBarWidth from '../scrollbar-width';
 import { getStyle, addClass, removeClass, hasClass } from '../dom';
 
@@ -12,36 +12,36 @@ export default {
   props: {
     visible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     openDelay: {},
     closeDelay: {},
     zIndex: {},
     modal: {
       type: Boolean,
-      default: false
+      default: false,
     },
     modalFade: {
       type: Boolean,
-      default: true
+      default: true,
     },
     modalClass: {},
     modalAppendToBody: {
       type: Boolean,
-      default: false
+      default: false,
     },
     lockScroll: {
       type: Boolean,
-      default: true
+      default: true,
     },
     closeOnPressEscape: {
       type: Boolean,
-      default: false
+      default: false,
     },
     closeOnClickModal: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   beforeMount() {
@@ -62,7 +62,7 @@ export default {
       bodyPaddingRight: null,
       computedBodyPaddingRight: 0,
       withoutHiddenClass: true,
-      rendered: false
+      rendered: false,
     };
   },
 
@@ -81,7 +81,7 @@ export default {
       } else {
         this.close();
       }
-    }
+    },
   },
 
   methods: {
@@ -130,7 +130,13 @@ export default {
           PopupManager.closeModal(this._popupId);
           this._closing = false;
         }
-        PopupManager.openModal(this._popupId, PopupManager.nextZIndex(), this.modalAppendToBody ? undefined : dom, props.modalClass, props.modalFade);
+        PopupManager.openModal(
+          this._popupId,
+          PopupManager.nextZIndex(),
+          this.modalAppendToBody ? undefined : dom,
+          props.modalClass,
+          props.modalFade
+        );
         if (props.lockScroll) {
           this.withoutHiddenClass = !hasClass(document.body, 'el-popup-parent--hidden');
           if (this.withoutHiddenClass) {
@@ -209,10 +215,8 @@ export default {
         removeClass(document.body, 'el-popup-parent--hidden');
       }
       this.withoutHiddenClass = true;
-    }
-  }
+    },
+  },
 };
 
-export {
-  PopupManager
-};
+export { PopupManager };

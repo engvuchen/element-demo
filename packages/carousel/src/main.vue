@@ -1,51 +1,44 @@
 <template>
-  <div
-    :class="carouselClasses"
-    @mouseenter.stop="handleMouseEnter"
-    @mouseleave.stop="handleMouseLeave">
-    <div
-      class="el-carousel__container"
-      :style="{ height: height }">
-      <transition
-        v-if="arrowDisplay"
-        name="carousel-arrow-left">
+  <div :class="carouselClasses" @mouseenter.stop="handleMouseEnter" @mouseleave.stop="handleMouseLeave">
+    <div class="el-carousel__container" :style="{ height: height }">
+      <transition v-if="arrowDisplay" name="carousel-arrow-left">
         <button
           type="button"
           v-show="(arrow === 'always' || hover) && (loop || activeIndex > 0)"
           @mouseenter="handleButtonEnter('left')"
           @mouseleave="handleButtonLeave"
           @click.stop="throttledArrowClick(activeIndex - 1)"
-          class="el-carousel__arrow el-carousel__arrow--left">
+          class="el-carousel__arrow el-carousel__arrow--left"
+        >
           <i class="el-icon-arrow-left"></i>
         </button>
       </transition>
-      <transition
-        v-if="arrowDisplay"
-        name="carousel-arrow-right">
+      <transition v-if="arrowDisplay" name="carousel-arrow-right">
         <button
           type="button"
           v-show="(arrow === 'always' || hover) && (loop || activeIndex < items.length - 1)"
           @mouseenter="handleButtonEnter('right')"
           @mouseleave="handleButtonLeave"
           @click.stop="throttledArrowClick(activeIndex + 1)"
-          class="el-carousel__arrow el-carousel__arrow--right">
+          class="el-carousel__arrow el-carousel__arrow--right"
+        >
           <i class="el-icon-arrow-right"></i>
         </button>
       </transition>
       <slot></slot>
     </div>
-    <ul
-      v-if="indicatorPosition !== 'none'"
-      :class="indicatorsClasses">
+    <ul v-if="indicatorPosition !== 'none'" :class="indicatorsClasses">
       <li
         v-for="(item, index) in items"
         :key="index"
         :class="[
           'el-carousel__indicator',
           'el-carousel__indicator--' + direction,
-          { 'is-active': index === activeIndex }]"
+          { 'is-active': index === activeIndex },
+        ]"
         @mouseenter="throttledIndicatorHover(index)"
-        @click.stop="handleIndicatorClick(index)">
+        @click.stop="handleIndicatorClick(index)"
+      >
         <button class="el-carousel__button">
           <span v-if="hasLabel">{{ item.label }}</span>
         </button>
@@ -56,7 +49,7 @@
 
 <script>
 import throttle from 'throttle-debounce/throttle';
-import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import { addResizeListener, removeResizeListener } from 'element-demo/src/utils/resize-event';
 
 export default {
   name: 'ElCarousel',
@@ -64,42 +57,42 @@ export default {
   props: {
     initialIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     height: String,
     trigger: {
       type: String,
-      default: 'hover'
+      default: 'hover',
     },
     autoplay: {
       type: Boolean,
-      default: true
+      default: true,
     },
     interval: {
       type: Number,
-      default: 3000
+      default: 3000,
     },
     indicatorPosition: String,
     indicator: {
       type: Boolean,
-      default: true
+      default: true,
     },
     arrow: {
       type: String,
-      default: 'hover'
+      default: 'hover',
     },
     type: String,
     loop: {
       type: Boolean,
-      default: true
+      default: true,
     },
     direction: {
       type: String,
       default: 'horizontal',
       validator(val) {
         return ['horizontal', 'vertical'].indexOf(val) !== -1;
-      }
-    }
+      },
+    },
   },
 
   data() {
@@ -108,7 +101,7 @@ export default {
       activeIndex: -1,
       containerWidth: 0,
       timer: null,
-      hover: false
+      hover: false,
     };
   },
 
@@ -138,7 +131,7 @@ export default {
         classes.push('el-carousel__indicators--outside');
       }
       return classes;
-    }
+    },
   },
 
   watch: {
@@ -164,7 +157,7 @@ export default {
     interval() {
       this.pauseTimer();
       this.startTimer();
-    }
+    },
   },
 
   methods: {
@@ -180,11 +173,15 @@ export default {
 
     itemInStage(item, index) {
       const length = this.items.length;
-      if (index === length - 1 && item.inStage && this.items[0].active ||
-        (item.inStage && this.items[index + 1] && this.items[index + 1].active)) {
+      if (
+        (index === length - 1 && item.inStage && this.items[0].active) ||
+        (item.inStage && this.items[index + 1] && this.items[index + 1].active)
+      ) {
         return 'left';
-      } else if (index === 0 && item.inStage && this.items[length - 1].active ||
-        (item.inStage && this.items[index - 1] && this.items[index - 1].active)) {
+      } else if (
+        (index === 0 && item.inStage && this.items[length - 1].active) ||
+        (item.inStage && this.items[index - 1] && this.items[index - 1].active)
+      ) {
         return 'right';
       }
       return false;
@@ -284,7 +281,7 @@ export default {
       if (this.trigger === 'hover' && index !== this.activeIndex) {
         this.activeIndex = index;
       }
-    }
+    },
   },
 
   created() {
@@ -310,6 +307,6 @@ export default {
   beforeDestroy() {
     if (this.$el) removeResizeListener(this.$el, this.resetItemPosition);
     this.pauseTimer();
-  }
+  },
 };
 </script>

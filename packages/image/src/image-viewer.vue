@@ -1,6 +1,11 @@
 <template>
   <transition name="viewer-fade">
-    <div tabindex="-1" ref="el-image-viewer__wrapper" class="el-image-viewer__wrapper" :style="{ 'z-index': viewerZIndex }">
+    <div
+      tabindex="-1"
+      ref="el-image-viewer__wrapper"
+      class="el-image-viewer__wrapper"
+      :style="{ 'z-index': viewerZIndex }"
+    >
       <div class="el-image-viewer__mask" @click.self="handleMaskClick"></div>
       <!-- CLOSE -->
       <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
@@ -11,14 +16,16 @@
         <span
           class="el-image-viewer__btn el-image-viewer__prev"
           :class="{ 'is-disabled': !infinite && isFirst }"
-          @click="prev">
-          <i class="el-icon-arrow-left"/>
+          @click="prev"
+        >
+          <i class="el-icon-arrow-left" />
         </span>
         <span
           class="el-image-viewer__btn el-image-viewer__next"
           :class="{ 'is-disabled': !infinite && isLast }"
-          @click="next">
-          <i class="el-icon-arrow-right"/>
+          @click="next"
+        >
+          <i class="el-icon-arrow-right" />
         </span>
       </template>
       <!-- ACTIONS -->
@@ -45,26 +52,27 @@
           :style="imgStyle"
           @load="handleImgLoad"
           @error="handleImgError"
-          @mousedown="handleMouseDown">
+          @mousedown="handleMouseDown"
+        />
       </div>
     </div>
   </transition>
 </template>
 
 <script>
-import { on, off } from 'element-ui/src/utils/dom';
-import { rafThrottle, isFirefox } from 'element-ui/src/utils/util';
-import { PopupManager } from 'element-ui/src/utils/popup';
+import { on, off } from 'element-demo/src/utils/dom';
+import { rafThrottle, isFirefox } from 'element-demo/src/utils/util';
+import { PopupManager } from 'element-demo/src/utils/popup';
 
 const Mode = {
   CONTAIN: {
     name: 'contain',
-    icon: 'el-icon-full-screen'
+    icon: 'el-icon-full-screen',
   },
   ORIGINAL: {
     name: 'original',
-    icon: 'el-icon-c-scale-to-original'
-  }
+    icon: 'el-icon-c-scale-to-original',
+  },
 };
 
 const mousewheelEventName = isFirefox() ? 'DOMMouseScroll' : 'mousewheel';
@@ -75,32 +83,32 @@ export default {
   props: {
     urlList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     zIndex: {
       type: Number,
-      default: 2000
+      default: 2000,
     },
     onSwitch: {
       type: Function,
-      default: () => {}
+      default: () => {},
     },
     onClose: {
       type: Function,
-      default: () => {}
+      default: () => {},
     },
     initialIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     appendToBody: {
       type: Boolean,
-      default: true
+      default: true,
     },
     maskClosable: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
@@ -115,8 +123,8 @@ export default {
         deg: 0,
         offsetX: 0,
         offsetY: 0,
-        enableTransition: false
-      }
+        enableTransition: false,
+      },
     };
   },
   computed: {
@@ -138,7 +146,7 @@ export default {
         transform: `scale(${scale}) rotate(${deg}deg)`,
         transition: enableTransition ? 'transform .3s' : '',
         'margin-left': `${offsetX}px`,
-        'margin-top': `${offsetY}px`
+        'margin-top': `${offsetY}px`,
       };
       if (this.mode === Mode.CONTAIN) {
         style.maxWidth = style.maxHeight = '100%';
@@ -148,14 +156,14 @@ export default {
     viewerZIndex() {
       const nextZIndex = PopupManager.nextZIndex();
       return this.zIndex > nextZIndex ? this.zIndex : nextZIndex;
-    }
+    },
   },
   watch: {
     index: {
-      handler: function(val) {
+      handler: function (val) {
         this.reset();
         this.onSwitch(val);
-      }
+      },
     },
     currentImg(val) {
       this.$nextTick(_ => {
@@ -164,7 +172,7 @@ export default {
           this.loading = true;
         }
       });
-    }
+    },
   },
   methods: {
     hide() {
@@ -207,12 +215,12 @@ export default {
         if (delta > 0) {
           this.handleActions('zoomIn', {
             zoomRate: 0.015,
-            enableTransition: false
+            enableTransition: false,
           });
         } else {
           this.handleActions('zoomOut', {
             zoomRate: 0.015,
-            enableTransition: false
+            enableTransition: false,
           });
         }
       });
@@ -260,7 +268,7 @@ export default {
         deg: 0,
         offsetX: 0,
         offsetY: 0,
-        enableTransition: false
+        enableTransition: false,
       };
     },
     toggleMode() {
@@ -289,7 +297,7 @@ export default {
         zoomRate: 0.2,
         rotateDeg: 90,
         enableTransition: true,
-        ...options
+        ...options,
       };
       const { transform } = this;
       switch (action) {
@@ -309,7 +317,7 @@ export default {
           break;
       }
       transform.enableTransition = enableTransition;
-    }
+    },
   },
   mounted() {
     this.deviceSupportInstall();
@@ -325,6 +333,6 @@ export default {
     if (this.appendToBody && this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el);
     }
-  }
+  },
 };
 </script>

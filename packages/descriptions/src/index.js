@@ -1,63 +1,63 @@
 import DescriptionsRow from './descriptions-row';
-import { isFunction } from 'element-ui/src/utils/types';
+import { isFunction } from 'element-demo/src/utils/types';
 
 export default {
   name: 'ElDescriptions',
   components: {
-    [DescriptionsRow.name]: DescriptionsRow
+    [DescriptionsRow.name]: DescriptionsRow,
   },
   props: {
     border: {
       type: Boolean,
-      default: false
+      default: false,
     },
     column: {
       type: Number,
-      default: 3
+      default: 3,
     },
     direction: {
       type: String,
-      default: 'horizontal'
+      default: 'horizontal',
     },
     size: {
-      type: String
+      type: String,
       // validator: isValidComponentSize,
     },
     title: {
       type: String,
-      default: ''
+      default: '',
     },
     extra: {
       type: String,
-      default: ''
+      default: '',
     },
     labelStyle: {
-      type: Object
+      type: Object,
     },
     contentStyle: {
-      type: Object
+      type: Object,
     },
     labelClassName: {
       type: String,
-      default: ''
+      default: '',
     },
     contentClassName: {
       type: String,
-      default: ''
+      default: '',
     },
     colon: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     descriptionsSize() {
       return this.size || (this.$ELEMENT || {}).size;
-    }
+    },
   },
   provide() {
     return {
-      elDescriptions: this
+      elDescriptions: this,
     };
   },
   methods: {
@@ -112,13 +112,15 @@ export default {
       return node;
     },
     getRows() {
-      const children = ((this.$slots.default || []).filter(vnode => vnode.tag &&
-            vnode.componentOptions && vnode.componentOptions.Ctor.options.name === 'ElDescriptionsItem'));
+      const children = (this.$slots.default || []).filter(
+        vnode =>
+          vnode.tag && vnode.componentOptions && vnode.componentOptions.Ctor.options.name === 'ElDescriptionsItem'
+      );
       const nodes = children.map(vnode => {
         return {
           props: this.getOptionProps(vnode),
           slots: this.getSlots(vnode),
-          vnode
+          vnode,
         };
       });
       const rows = [];
@@ -146,7 +148,7 @@ export default {
       });
 
       return rows;
-    }
+    },
   },
   render() {
     const { title, extra, border, descriptionsSize, $slots } = this;
@@ -154,21 +156,15 @@ export default {
 
     return (
       <div class="el-descriptions">
-        {
-          (title || extra || $slots.title || $slots.extra)
-            ? <div class="el-descriptions__header">
-              <div class="el-descriptions__title">
-                { $slots.title ? $slots.title : title}
-              </div>
-              <div class="el-descriptions__extra">
-                { $slots.extra ? $slots.extra : extra }
-              </div>
-            </div>
-            : null
-        }
+        {title || extra || $slots.title || $slots.extra ? (
+          <div class="el-descriptions__header">
+            <div class="el-descriptions__title">{$slots.title ? $slots.title : title}</div>
+            <div class="el-descriptions__extra">{$slots.extra ? $slots.extra : extra}</div>
+          </div>
+        ) : null}
 
         <div class="el-descriptions__body">
-          <table class={[{'is-bordered': border}, descriptionsSize ? `el-descriptions--${descriptionsSize}` : '']}>
+          <table class={[{ 'is-bordered': border }, descriptionsSize ? `el-descriptions--${descriptionsSize}` : '']}>
             {rows.map(row => (
               <DescriptionsRow row={row}></DescriptionsRow>
             ))}
@@ -176,5 +172,5 @@ export default {
         </div>
       </div>
     );
-  }
+  },
 };

@@ -1,30 +1,30 @@
 import Vue from 'vue';
 import Main from './main.vue';
-import { PopupManager } from 'element-ui/src/utils/popup';
-import { isVNode } from 'element-ui/src/utils/vdom';
-import { isObject } from 'element-ui/src/utils/types';
+import { PopupManager } from 'element-demo/src/utils/popup';
+import { isVNode } from 'element-demo/src/utils/vdom';
+import { isObject } from 'element-demo/src/utils/types';
 let MessageConstructor = Vue.extend(Main);
 
 let instance;
 let instances = [];
 let seed = 1;
 
-const Message = function(options) {
+const Message = function (options) {
   if (Vue.prototype.$isServer) return;
   options = options || {};
   if (typeof options === 'string') {
     options = {
-      message: options
+      message: options,
     };
   }
   let userOnClose = options.onClose;
   let id = 'message_' + seed++;
 
-  options.onClose = function() {
+  options.onClose = function () {
     Message.close(id, userOnClose);
   };
   instance = new MessageConstructor({
-    data: options
+    data: options,
   });
   instance.id = id;
   if (isVNode(instance.message)) {
@@ -45,21 +45,21 @@ const Message = function(options) {
 };
 
 ['success', 'warning', 'info', 'error'].forEach(type => {
-  Message[type] = (options) => {
+  Message[type] = options => {
     if (isObject(options) && !isVNode(options)) {
       return Message({
         ...options,
-        type
+        type,
       });
     }
     return Message({
       type,
-      message: options
+      message: options,
     });
   };
 });
 
-Message.close = function(id, userOnClose) {
+Message.close = function (id, userOnClose) {
   let len = instances.length;
   let index = -1;
   let removedHeight;
@@ -75,14 +75,13 @@ Message.close = function(id, userOnClose) {
     }
   }
   if (len <= 1 || index === -1 || index > instances.length - 1) return;
-  for (let i = index; i < len - 1 ; i++) {
+  for (let i = index; i < len - 1; i++) {
     let dom = instances[i].$el;
-    dom.style['top'] =
-      parseInt(dom.style['top'], 10) - removedHeight - 16 + 'px';
+    dom.style['top'] = parseInt(dom.style['top'], 10) - removedHeight - 16 + 'px';
   }
 };
 
-Message.closeAll = function() {
+Message.closeAll = function () {
   for (let i = instances.length - 1; i >= 0; i--) {
     instances[i].close();
   }

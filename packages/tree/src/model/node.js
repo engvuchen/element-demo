@@ -1,6 +1,6 @@
-import objectAssign from 'element-ui/src/utils/merge';
+import objectAssign from 'element-demo/src/utils/merge';
 import { markNodeData, NODE_KEY } from './util';
-import { arrayFindIndex } from 'element-ui/src/utils/util';
+import { arrayFindIndex } from 'element-demo/src/utils/util';
 
 export const getChildState = node => {
   let all = true;
@@ -22,10 +22,10 @@ export const getChildState = node => {
   return { all, none, allWithoutDisable, half: !all && !none };
 };
 
-const reInitChecked = function(node) {
+const reInitChecked = function (node) {
   if (node.childNodes.length === 0) return;
 
-  const {all, none, half} = getChildState(node.childNodes);
+  const { all, none, half } = getChildState(node.childNodes);
   if (all) {
     node.checked = true;
     node.indeterminate = false;
@@ -45,7 +45,7 @@ const reInitChecked = function(node) {
   }
 };
 
-const getPropertyFromData = function(node, prop) {
+const getPropertyFromData = function (node, prop) {
   const props = node.store.props;
   const data = node.data || {};
   const config = props[prop];
@@ -192,7 +192,7 @@ export default class Node {
   }
 
   contains(target, deep = true) {
-    const walk = function(parent) {
+    const walk = function (parent) {
       const children = parent.childNodes || [];
       let result = false;
       for (let i = 0, j = children.length; i < j; i++) {
@@ -231,7 +231,7 @@ export default class Node {
       }
       objectAssign(child, {
         parent: this,
-        store: this.store
+        store: this.store,
       });
       child = new Node(child);
     }
@@ -311,7 +311,7 @@ export default class Node {
     };
 
     if (this.shouldLoadData()) {
-      this.loadData((data) => {
+      this.loadData(data => {
         if (data instanceof Array) {
           if (this.checked) {
             this.setChecked(true, true);
@@ -327,7 +327,7 @@ export default class Node {
   }
 
   doCreateChildren(array, defaultProps = {}) {
-    array.forEach((item) => {
+    array.forEach(item => {
       this.insertChild(objectAssign({ data: item }, defaultProps), undefined, true);
     });
   }
@@ -362,7 +362,7 @@ export default class Node {
     if (!(this.shouldLoadData() && !this.store.checkDescendants)) {
       let { all, allWithoutDisable } = getChildState(this.childNodes);
 
-      if (!this.isLeaf && (!all && allWithoutDisable)) {
+      if (!this.isLeaf && !all && allWithoutDisable) {
         this.checked = false;
         value = false;
       }
@@ -386,12 +386,15 @@ export default class Node {
 
       if (this.shouldLoadData()) {
         // Only work on lazy load data.
-        this.loadData(() => {
-          handleDescendants();
-          reInitChecked(this);
-        }, {
-          checked: value !== false
-        });
+        this.loadData(
+          () => {
+            handleDescendants();
+            reInitChecked(this);
+          },
+          {
+            checked: value !== false,
+          }
+        );
         return;
       } else {
         handleDescendants();
@@ -406,7 +409,8 @@ export default class Node {
     }
   }
 
-  getChildren(forceInit = false) { // this is data
+  getChildren(forceInit = false) {
+    // this is data
     if (this.level === 0) return this.data;
     const data = this.data;
     if (!data) return null;
@@ -430,7 +434,7 @@ export default class Node {
 
   updateChildren() {
     const newData = this.getChildren() || [];
-    const oldData = this.childNodes.map((node) => node.data);
+    const oldData = this.childNodes.map(node => node.data);
 
     const newDataMap = {};
     const newNodes = [];
@@ -446,7 +450,7 @@ export default class Node {
     });
 
     if (!this.store.lazy) {
-      oldData.forEach((item) => {
+      oldData.forEach(item => {
         if (!newDataMap[item[NODE_KEY]]) this.removeChildByData(item);
       });
     }
@@ -459,10 +463,15 @@ export default class Node {
   }
 
   loadData(callback, defaultProps = {}) {
-    if (this.store.lazy === true && this.store.load && !this.loaded && (!this.loading || Object.keys(defaultProps).length)) {
+    if (
+      this.store.lazy === true &&
+      this.store.load &&
+      !this.loaded &&
+      (!this.loading || Object.keys(defaultProps).length)
+    ) {
       this.loading = true;
 
-      const resolve = (children) => {
+      const resolve = children => {
         this.loaded = true;
         this.loading = false;
         this.childNodes = [];

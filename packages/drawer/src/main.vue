@@ -1,18 +1,13 @@
 <template>
-  <transition
-    name="el-drawer-fade"
-    @after-enter="afterEnter"
-    @after-leave="afterLeave">
-    <div
-      class="el-drawer__wrapper"
-      tabindex="-1"
-      v-show="visible">
+  <transition name="el-drawer-fade" @after-enter="afterEnter" @after-leave="afterLeave">
+    <div class="el-drawer__wrapper" tabindex="-1" v-show="visible">
       <div
         class="el-drawer__container"
         :class="visible && 'el-drawer__open'"
         @click.self="handleWrapperClick"
         role="document"
-        tabindex="-1">
+        tabindex="-1"
+      >
         <div
           aria-modal="true"
           aria-labelledby="el-drawer__title"
@@ -23,7 +18,7 @@
           ref="drawer"
           role="dialog"
           tabindex="-1"
-          >
+        >
           <header class="el-drawer__header" id="el-drawer__title" v-if="withHeader">
             <slot name="title">
               <span role="heading" :title="title">{{ title }}</span>
@@ -33,7 +28,8 @@
               class="el-drawer__close-btn"
               type="button"
               v-if="showClose"
-              @click="closeDrawer">
+              @click="closeDrawer"
+            >
               <i class="el-dialog__close el-icon el-icon-close"></i>
             </button>
           </header>
@@ -47,8 +43,8 @@
 </template>
 
 <script>
-import Popup from 'element-ui/src/utils/popup';
-import emitter from 'element-ui/src/mixins/emitter';
+import Popup from 'element-demo/src/utils/popup';
+import emitter from 'element-demo/src/mixins/emitter';
 
 export default {
   name: 'ElDrawer',
@@ -56,61 +52,61 @@ export default {
   props: {
     appendToBody: {
       type: Boolean,
-      default: false
+      default: false,
     },
     beforeClose: {
-      type: Function
+      type: Function,
     },
     customClass: {
       type: String,
-      default: ''
+      default: '',
     },
     closeOnPressEscape: {
       type: Boolean,
-      default: true
+      default: true,
     },
     destroyOnClose: {
       type: Boolean,
-      default: false
+      default: false,
     },
     modal: {
       type: Boolean,
-      default: true
+      default: true,
     },
     direction: {
       type: String,
       default: 'rtl',
       validator(val) {
         return ['ltr', 'rtl', 'ttb', 'btt'].indexOf(val) !== -1;
-      }
+      },
     },
     modalAppendToBody: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showClose: {
       type: Boolean,
-      default: true
+      default: true,
     },
     size: {
       type: [Number, String],
-      default: '30%'
+      default: '30%',
     },
     title: {
       type: String,
-      default: ''
+      default: '',
     },
     visible: {
-      type: Boolean
+      type: Boolean,
     },
     wrapperClosable: {
       type: Boolean,
-      default: true
+      default: true,
     },
     withHeader: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     isHorizontal() {
@@ -118,12 +114,12 @@ export default {
     },
     drawerSize() {
       return typeof this.size === 'number' ? `${this.size}px` : this.size;
-    }
+    },
   },
   data() {
     return {
       closed: false,
-      prevActiveElement: null
+      prevActiveElement: null,
     };
   },
   watch: {
@@ -148,7 +144,7 @@ export default {
           }
         });
       }
-    }
+    },
   },
   methods: {
     afterEnter() {
@@ -184,7 +180,7 @@ export default {
       // pressing `ESC` will call this method, and also close the drawer.
       // This method also calls `beforeClose` if there was one.
       this.closeDrawer();
-    }
+    },
   },
   mounted() {
     if (this.visible) {
@@ -197,6 +193,6 @@ export default {
     if (this.appendToBody && this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el);
     }
-  }
+  },
 };
 </script>

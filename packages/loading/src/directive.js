@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Loading from './loading.vue';
-import { addClass, removeClass, getStyle } from 'element-ui/src/utils/dom';
-import { PopupManager } from 'element-ui/src/utils/popup';
-import afterLeave from 'element-ui/src/utils/after-leave';
+import { addClass, removeClass, getStyle } from 'element-demo/src/utils/dom';
+import { PopupManager } from 'element-demo/src/utils/popup';
+import afterLeave from 'element-demo/src/utils/after-leave';
 const Mask = Vue.extend(Loading);
 
 const loadingDirective = {};
@@ -26,10 +26,11 @@ loadingDirective.install = Vue => {
 
             ['top', 'left'].forEach(property => {
               const scroll = property === 'top' ? 'scrollTop' : 'scrollLeft';
-              el.maskStyle[property] = el.getBoundingClientRect()[property] +
+              el.maskStyle[property] =
+                el.getBoundingClientRect()[property] +
                 document.body[scroll] +
                 document.documentElement[scroll] -
-                parseInt(getStyle(document.body, `margin-${ property }`), 10) +
+                parseInt(getStyle(document.body, `margin-${property}`), 10) +
                 'px';
             });
             ['height', 'width'].forEach(property => {
@@ -44,16 +45,19 @@ loadingDirective.install = Vue => {
         }
       });
     } else {
-      afterLeave(el.instance, _ => {
-        if (!el.instance.hiding) return;
-        el.domVisible = false;
-        const target = binding.modifiers.fullscreen || binding.modifiers.body
-          ? document.body
-          : el;
-        removeClass(target, 'el-loading-parent--relative');
-        removeClass(target, 'el-loading-parent--hidden');
-        el.instance.hiding = false;
-      }, 300, true);
+      afterLeave(
+        el.instance,
+        _ => {
+          if (!el.instance.hiding) return;
+          el.domVisible = false;
+          const target = binding.modifiers.fullscreen || binding.modifiers.body ? document.body : el;
+          removeClass(target, 'el-loading-parent--relative');
+          removeClass(target, 'el-loading-parent--hidden');
+          el.instance.hiding = false;
+        },
+        300,
+        true
+      );
       el.instance.visible = false;
       el.instance.hiding = true;
     }
@@ -88,7 +92,7 @@ loadingDirective.install = Vue => {
   };
 
   Vue.directive('loading', {
-    bind: function(el, binding, vnode) {
+    bind: function (el, binding, vnode) {
       const textExr = el.getAttribute('element-loading-text');
       const spinnerExr = el.getAttribute('element-loading-spinner');
       const backgroundExr = el.getAttribute('element-loading-background');
@@ -97,12 +101,12 @@ loadingDirective.install = Vue => {
       const mask = new Mask({
         el: document.createElement('div'),
         data: {
-          text: vm && vm[textExr] || textExr,
-          spinner: vm && vm[spinnerExr] || spinnerExr,
-          background: vm && vm[backgroundExr] || backgroundExr,
-          customClass: vm && vm[customClassExr] || customClassExr,
-          fullscreen: !!binding.modifiers.fullscreen
-        }
+          text: (vm && vm[textExr]) || textExr,
+          spinner: (vm && vm[spinnerExr]) || spinnerExr,
+          background: (vm && vm[backgroundExr]) || backgroundExr,
+          customClass: (vm && vm[customClassExr]) || customClassExr,
+          fullscreen: !!binding.modifiers.fullscreen,
+        },
       });
       el.instance = mask;
       el.mask = mask.$el;
@@ -111,22 +115,20 @@ loadingDirective.install = Vue => {
       binding.value && toggleLoading(el, binding);
     },
 
-    update: function(el, binding) {
+    update: function (el, binding) {
       el.instance.setText(el.getAttribute('element-loading-text'));
       if (binding.oldValue !== binding.value) {
         toggleLoading(el, binding);
       }
     },
 
-    unbind: function(el, binding) {
+    unbind: function (el, binding) {
       if (el.domInserted) {
-        el.mask &&
-        el.mask.parentNode &&
-        el.mask.parentNode.removeChild(el.mask);
+        el.mask && el.mask.parentNode && el.mask.parentNode.removeChild(el.mask);
         toggleLoading(el, { value: false, modifiers: binding.modifiers });
       }
       el.instance && el.instance.$destroy();
-    }
+    },
   });
 };
 
