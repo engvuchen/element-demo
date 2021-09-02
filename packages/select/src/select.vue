@@ -240,6 +240,10 @@ export default {
   props: {
     name: String,
     id: String,
+    /**
+     * 绑定值
+     * @show
+     */
     value: {
       required: true,
     },
@@ -277,6 +281,10 @@ export default {
       type: Number,
       default: 0,
     },
+    /**
+     * 占位符
+     * @show
+     */
     placeholder: {
       type: String,
       required: false,
