@@ -58,6 +58,10 @@ export default {
   name: 'ElStep',
 
   props: {
+    /**
+     * 标题
+     * @show
+     */
     title: String,
     icon: String,
     description: String,
