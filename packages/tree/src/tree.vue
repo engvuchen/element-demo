@@ -61,6 +61,10 @@ export default {
   },
 
   props: {
+    /**
+     * 展示数据
+     * @show
+     */
     data: {
       type: Array,
     },
