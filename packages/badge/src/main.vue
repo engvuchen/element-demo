@@ -23,6 +23,10 @@ export default {
   name: 'ElBadge',
 
   props: {
+    /**
+     * 绑定值
+     * @show
+     */
     value: [String, Number],
     max: Number,
     isDot: Boolean,
