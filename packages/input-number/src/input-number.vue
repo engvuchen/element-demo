@@ -88,6 +88,10 @@ export default {
       type: Number,
       default: -Infinity,
     },
+    /**
+     * 绑定值
+     * @show
+     */
     value: {},
     disabled: Boolean,
     size: String,
@@ -101,6 +105,10 @@ export default {
     },
     name: String,
     label: String,
+    /**
+     * 输入框默认 placeholder
+     * @show
+     */
     placeholder: String,
     precision: {
       type: Number,
