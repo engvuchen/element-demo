@@ -8,6 +8,10 @@
     name: 'ElBreadcrumb',
 
     props: {
+      /**
+       * 分隔符
+       * @show
+       */
       separator: {
         type: String,
         default: '/'
