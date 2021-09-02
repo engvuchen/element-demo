@@ -185,7 +185,15 @@ export default {
   },
 
   props: {
+    /**
+     * 绑定值
+     * @show
+     */
     value: {},
+    /**
+     * 可选项数据源，键名可通过 Props 属性配置
+     * @show
+     */
     options: Array,
     props: Object,
     size: String,
