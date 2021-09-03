@@ -13,7 +13,15 @@ export default {
   mixins: [Migrating],
 
   props: {
+    /**
+     * 每个 step 的间距，不填写将自适应间距。支持百分比。
+     * @show
+     */
     space: [Number, String],
+    /**
+     * 设置当前激活步骤
+     * @show
+     */
     active: Number,
     direction: {
       type: String,
