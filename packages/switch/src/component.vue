@@ -50,6 +50,10 @@ export default {
     },
   },
   props: {
+    /**
+     * 	绑定值
+     * @show
+     */
     value: {
       type: [Boolean, String, Number],
       default: false,
