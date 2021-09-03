@@ -27,6 +27,10 @@
 export default {
   name: 'ElSkeleton',
   props: {
+    /**
+     * 是否使用动画
+     * @show
+     */
     animated: {
       type: Boolean,
       default: false

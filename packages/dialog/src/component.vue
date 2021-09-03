@@ -38,6 +38,10 @@ export default {
   mixins: [Popup, emitter, Migrating],
 
   props: {
+    /**
+     * Dialog 的标题，也可通过具名 slot （见下表）传入
+     * @show
+     */
     title: {
       type: String,
       default: '',
