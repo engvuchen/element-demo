@@ -36,6 +36,10 @@ export default {
       default: true
     },
     disabled: Boolean,
+    /**
+     * 原生 href 属性
+     * @show
+     */
     href: String,
     icon: String
   },
