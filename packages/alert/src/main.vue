@@ -29,6 +29,10 @@
     name: 'ElAlert',
 
     props: {
+      /**
+       * 标题
+       * @show
+       */
       title: {
         type: String,
         default: ''
@@ -37,6 +41,10 @@
         type: String,
         default: ''
       },
+      /**
+       * @enum ['success', 'warning', 'info', 'error']
+       * @show
+       */
       type: {
         type: String,
         default: 'info'
