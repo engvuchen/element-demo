@@ -101,6 +101,10 @@ export default {
       type: Number,
       default: 1,
     },
+    /**
+     * 绑定值
+     * @show
+     */
     value: {
       type: [Number, Array],
       default: 0,
