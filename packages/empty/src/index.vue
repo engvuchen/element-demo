@@ -31,6 +31,10 @@ export default {
       default: '',
     },
     imageSize: Number,
+    /**
+     * 文本描述
+     * @show
+     */
     description: {
       type: String,
       default: '',
