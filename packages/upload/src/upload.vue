@@ -1,21 +1,25 @@
 <script>
-import ajax from './ajax';
-import UploadDragger from './upload-dragger.vue';
+import ajax from "./ajax";
+import UploadDragger from "./upload-dragger.vue";
 
 export default {
-  inject: ['uploader'],
+  inject: ["uploader"],
   components: {
-    UploadDragger
+    UploadDragger,
   },
   props: {
     type: String,
+    /**
+     * 必选参数，上传的地址
+     * @show
+     */
     action: {
       type: String,
-      required: true
+      required: true,
     },
     name: {
       type: String,
-      default: 'file'
+      default: "file",
     },
     data: Object,
     headers: Object,
@@ -30,34 +34,34 @@ export default {
     drag: Boolean,
     onPreview: {
       type: Function,
-      default: function() {}
+      default: function () {},
     },
     onRemove: {
       type: Function,
-      default: function() {}
+      default: function () {},
     },
     fileList: Array,
     autoUpload: Boolean,
     listType: String,
     httpRequest: {
       type: Function,
-      default: ajax
+      default: ajax,
     },
     disabled: Boolean,
     limit: Number,
-    onExceed: Function
+    onExceed: Function,
   },
 
   data() {
     return {
       mouseover: false,
-      reqs: {}
+      reqs: {},
     };
   },
 
   methods: {
     isImage(str) {
-      return str.indexOf('image') !== -1;
+      return str.indexOf("image") !== -1;
     },
     handleChange(ev) {
       const files = ev.target.files;
@@ -72,9 +76,13 @@ export default {
       }
 
       let postFiles = Array.prototype.slice.call(files);
-      if (!this.multiple) { postFiles = postFiles.slice(0, 1); }
+      if (!this.multiple) {
+        postFiles = postFiles.slice(0, 1);
+      }
 
-      if (postFiles.length === 0) { return; }
+      if (postFiles.length === 0) {
+        return;
+      }
 
       postFiles.forEach(rawFile => {
         this.onStart(rawFile);
@@ -90,27 +98,30 @@ export default {
 
       const before = this.beforeUpload(rawFile);
       if (before && before.then) {
-        before.then(processedFile => {
-          const fileType = Object.prototype.toString.call(processedFile);
+        before.then(
+          processedFile => {
+            const fileType = Object.prototype.toString.call(processedFile);
 
-          if (fileType === '[object File]' || fileType === '[object Blob]') {
-            if (fileType === '[object Blob]') {
-              processedFile = new File([processedFile], rawFile.name, {
-                type: rawFile.type
-              });
-            }
-            for (const p in rawFile) {
-              if (rawFile.hasOwnProperty(p)) {
-                processedFile[p] = rawFile[p];
+            if (fileType === "[object File]" || fileType === "[object Blob]") {
+              if (fileType === "[object Blob]") {
+                processedFile = new File([processedFile], rawFile.name, {
+                  type: rawFile.type,
+                });
               }
+              for (const p in rawFile) {
+                if (rawFile.hasOwnProperty(p)) {
+                  processedFile[p] = rawFile[p];
+                }
+              }
+              this.post(processedFile);
+            } else {
+              this.post(rawFile);
             }
-            this.post(processedFile);
-          } else {
-            this.post(rawFile);
+          },
+          () => {
+            this.onRemove(null, rawFile);
           }
-        }, () => {
-          this.onRemove(null, rawFile);
-        });
+        );
       } else if (before !== false) {
         this.post(rawFile);
       } else {
@@ -126,7 +137,7 @@ export default {
           reqs[uid].abort();
         }
       } else {
-        Object.keys(reqs).forEach((uid) => {
+        Object.keys(reqs).forEach(uid => {
           if (reqs[uid]) reqs[uid].abort();
           delete reqs[uid];
         });
@@ -151,7 +162,7 @@ export default {
         onError: err => {
           this.onError(err, rawFile);
           delete this.reqs[uid];
-        }
+        },
       };
       const req = this.httpRequest(options);
       this.reqs[uid] = req;
@@ -170,7 +181,7 @@ export default {
       if (e.keyCode === 13 || e.keyCode === 32) {
         this.handleClick();
       }
-    }
+    },
   },
 
   render(h) {
@@ -184,28 +195,38 @@ export default {
       listType,
       uploadFiles,
       disabled,
-      handleKeydown
+      handleKeydown,
     } = this;
     const data = {
       class: {
-        'el-upload': true
+        "el-upload": true,
       },
       on: {
         click: handleClick,
-        keydown: handleKeydown
-      }
+        keydown: handleKeydown,
+      },
     };
     data.class[`el-upload--${listType}`] = true;
     return (
-      <div {...data} tabindex="0" >
-        {
-          drag
-            ? <upload-dragger disabled={disabled} on-file={uploadFiles}>{this.$slots.default}</upload-dragger>
-            : this.$slots.default
-        }
-        <input class="el-upload__input" type="file" ref="input" name={name} on-change={handleChange} multiple={multiple} accept={accept}></input>
+      <div {...data} tabindex="0">
+        {drag ? (
+          <upload-dragger disabled={disabled} on-file={uploadFiles}>
+            {this.$slots.default}
+          </upload-dragger>
+        ) : (
+          this.$slots.default
+        )}
+        <input
+          class="el-upload__input"
+          type="file"
+          ref="input"
+          name={name}
+          on-change={handleChange}
+          multiple={multiple}
+          accept={accept}
+        ></input>
       </div>
     );
-  }
+  },
 };
 </script>
