@@ -46,14 +46,14 @@
 </template>
 
 <script>
-import ElButton from 'element-demo/packages/button';
-import Emitter from 'element-demo/src/mixins/emitter';
-import Locale from 'element-demo/src/mixins/locale';
-import TransferPanel from './transfer-panel.vue';
-import Migrating from 'element-demo/src/mixins/migrating';
+import ElButton from "element-demo/packages/button";
+import Emitter from "element-demo/src/mixins/emitter";
+import Locale from "element-demo/src/mixins/locale";
+import TransferPanel from "./transfer-panel.vue";
+import Migrating from "element-demo/src/mixins/migrating";
 
 export default {
-  name: 'ElTransfer',
+  name: "ElTransfer",
 
   mixins: [Emitter, Locale, Migrating],
 
@@ -63,6 +63,10 @@ export default {
   },
 
   props: {
+    /**
+     * Transfer 的数据源
+     * @show
+     */
     data: {
       type: Array,
       default() {
@@ -83,7 +87,7 @@ export default {
     },
     filterPlaceholder: {
       type: String,
-      default: '',
+      default: "",
     },
     filterMethod: Function,
     leftDefaultChecked: {
@@ -99,6 +103,10 @@ export default {
       },
     },
     renderContent: Function,
+    /**
+     * 绑定值
+     * @show
+     */
     value: {
       type: Array,
       default() {
@@ -116,15 +124,15 @@ export default {
       type: Object,
       default() {
         return {
-          label: 'label',
-          key: 'key',
-          disabled: 'disabled',
+          label: "label",
+          key: "key",
+          disabled: "disabled",
         };
       },
     },
     targetOrder: {
       type: String,
-      default: 'original',
+      default: "original",
     },
   },
 
@@ -142,12 +150,16 @@ export default {
     },
 
     sourceData() {
-      return this.data.filter(item => this.value.indexOf(item[this.props.key]) === -1);
+      return this.data.filter(
+        item => this.value.indexOf(item[this.props.key]) === -1
+      );
     },
 
     targetData() {
-      if (this.targetOrder === 'original') {
-        return this.data.filter(item => this.value.indexOf(item[this.props.key]) > -1);
+      if (this.targetOrder === "original") {
+        return this.data.filter(
+          item => this.value.indexOf(item[this.props.key]) > -1
+        );
       } else {
         return this.value.reduce((arr, cur) => {
           const val = this.dataObj[cur];
@@ -166,7 +178,7 @@ export default {
 
   watch: {
     value(val) {
-      this.dispatch('ElFormItem', 'el.form.change', val);
+      this.dispatch("ElFormItem", "el.form.change", val);
     },
   },
 
@@ -174,7 +186,7 @@ export default {
     getMigratingConfig() {
       return {
         props: {
-          'footer-format': 'footer-format is renamed to format.',
+          "footer-format": "footer-format is renamed to format.",
         },
       };
     },
@@ -182,13 +194,13 @@ export default {
     onSourceCheckedChange(val, movedKeys) {
       this.leftChecked = val;
       if (movedKeys === undefined) return;
-      this.$emit('left-check-change', val, movedKeys);
+      this.$emit("left-check-change", val, movedKeys);
     },
 
     onTargetCheckedChange(val, movedKeys) {
       this.rightChecked = val;
       if (movedKeys === undefined) return;
-      this.$emit('right-check-change', val, movedKeys);
+      this.$emit("right-check-change", val, movedKeys);
     },
 
     addToLeft() {
@@ -199,8 +211,8 @@ export default {
           currentValue.splice(index, 1);
         }
       });
-      this.$emit('input', currentValue);
-      this.$emit('change', currentValue, 'left', this.rightChecked);
+      this.$emit("input", currentValue);
+      this.$emit("change", currentValue, "left", this.rightChecked);
     },
 
     addToRight() {
@@ -209,21 +221,26 @@ export default {
       const key = this.props.key;
       this.data.forEach(item => {
         const itemKey = item[key];
-        if (this.leftChecked.indexOf(itemKey) > -1 && this.value.indexOf(itemKey) === -1) {
+        if (
+          this.leftChecked.indexOf(itemKey) > -1 &&
+          this.value.indexOf(itemKey) === -1
+        ) {
           itemsToBeMoved.push(itemKey);
         }
       });
       currentValue =
-        this.targetOrder === 'unshift' ? itemsToBeMoved.concat(currentValue) : currentValue.concat(itemsToBeMoved);
-      this.$emit('input', currentValue);
-      this.$emit('change', currentValue, 'right', this.leftChecked);
+        this.targetOrder === "unshift"
+          ? itemsToBeMoved.concat(currentValue)
+          : currentValue.concat(itemsToBeMoved);
+      this.$emit("input", currentValue);
+      this.$emit("change", currentValue, "right", this.leftChecked);
     },
 
     clearQuery(which) {
-      if (which === 'left') {
-        this.$refs.leftPanel.query = '';
-      } else if (which === 'right') {
-        this.$refs.rightPanel.query = '';
+      if (which === "left") {
+        this.$refs.leftPanel.query = "";
+      } else if (which === "right") {
+        this.$refs.rightPanel.query = "";
       }
     },
   },
