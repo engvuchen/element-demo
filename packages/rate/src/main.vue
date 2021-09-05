@@ -18,27 +18,42 @@
       :style="{ cursor: rateDisabled ? 'auto' : 'pointer' }"
       :key="key"
     >
-      <i :class="[classes[item - 1], { hover: hoverIndex === item }]" class="el-rate__icon" :style="getIconStyle(item)">
-        <i v-if="showDecimalIcon(item)" :class="decimalIconClass" :style="decimalStyle" class="el-rate__decimal"> </i>
+      <i
+        :class="[classes[item - 1], { hover: hoverIndex === item }]"
+        class="el-rate__icon"
+        :style="getIconStyle(item)"
+      >
+        <i
+          v-if="showDecimalIcon(item)"
+          :class="decimalIconClass"
+          :style="decimalStyle"
+          class="el-rate__decimal"
+        >
+        </i>
       </i>
     </span>
-    <span v-if="showText || showScore" class="el-rate__text" :style="{ color: textColor }">{{ text }}</span>
+    <span
+      v-if="showText || showScore"
+      class="el-rate__text"
+      :style="{ color: textColor }"
+      >{{ text }}</span
+    >
   </div>
 </template>
 
 <script>
-import { hasClass } from 'element-demo/src/utils/dom';
-import { isObject } from 'element-demo/src/utils/types';
-import Migrating from 'element-demo/src/mixins/migrating';
+import { hasClass } from "element-demo/src/utils/dom";
+import { isObject } from "element-demo/src/utils/types";
+import Migrating from "element-demo/src/mixins/migrating";
 
 export default {
-  name: 'ElRate',
+  name: "ElRate",
 
   mixins: [Migrating],
 
   inject: {
     elForm: {
-      default: '',
+      default: "",
     },
   },
 
@@ -51,6 +66,10 @@ export default {
   },
 
   props: {
+    /**
+     * 绑定值
+     * @show
+     */
     value: {
       type: Number,
       default: 0,
@@ -70,30 +89,30 @@ export default {
     colors: {
       type: [Array, Object],
       default() {
-        return ['#F7BA2A', '#F7BA2A', '#F7BA2A'];
+        return ["#F7BA2A", "#F7BA2A", "#F7BA2A"];
       },
     },
     voidColor: {
       type: String,
-      default: '#C6D1DE',
+      default: "#C6D1DE",
     },
     disabledVoidColor: {
       type: String,
-      default: '#EFF2F7',
+      default: "#EFF2F7",
     },
     iconClasses: {
       type: [Array, Object],
       default() {
-        return ['el-icon-star-on', 'el-icon-star-on', 'el-icon-star-on'];
+        return ["el-icon-star-on", "el-icon-star-on", "el-icon-star-on"];
       },
     },
     voidIconClass: {
       type: String,
-      default: 'el-icon-star-off',
+      default: "el-icon-star-off",
     },
     disabledVoidIconClass: {
       type: String,
-      default: 'el-icon-star-on',
+      default: "el-icon-star-on",
     },
     disabled: {
       type: Boolean,
@@ -113,25 +132,28 @@ export default {
     },
     textColor: {
       type: String,
-      default: '#1f2d3d',
+      default: "#1f2d3d",
     },
     texts: {
       type: Array,
       default() {
-        return ['极差', '失望', '一般', '满意', '惊喜'];
+        return ["极差", "失望", "一般", "满意", "惊喜"];
       },
     },
     scoreTemplate: {
       type: String,
-      default: '{value}',
+      default: "{value}",
     },
   },
 
   computed: {
     text() {
-      let result = '';
+      let result = "";
       if (this.showScore) {
-        result = this.scoreTemplate.replace(/\{\s*value\s*\}/, this.rateDisabled ? this.value : this.currentValue);
+        result = this.scoreTemplate.replace(
+          /\{\s*value\s*\}/,
+          this.rateDisabled ? this.value : this.currentValue
+        );
       } else if (this.showText) {
         result = this.texts[Math.ceil(this.currentValue) - 1];
       }
@@ -139,11 +161,11 @@ export default {
     },
 
     decimalStyle() {
-      let width = '';
+      let width = "";
       if (this.rateDisabled) {
         width = `${this.valueDecimal}%`;
       } else if (this.allowHalf) {
-        width = '50%';
+        width = "50%";
       }
       return {
         color: this.activeColor,
@@ -159,7 +181,10 @@ export default {
       return Array.isArray(this.iconClasses)
         ? {
             [this.lowThreshold]: this.iconClasses[0],
-            [this.highThreshold]: { value: this.iconClasses[1], excluded: true },
+            [this.highThreshold]: {
+              value: this.iconClasses[1],
+              excluded: true,
+            },
             [this.max]: this.iconClasses[2],
           }
         : this.iconClasses;
@@ -170,7 +195,9 @@ export default {
     },
 
     voidClass() {
-      return this.rateDisabled ? this.disabledVoidIconClass : this.voidIconClass;
+      return this.rateDisabled
+        ? this.disabledVoidIconClass
+        : this.voidIconClass;
     },
 
     activeClass() {
@@ -195,7 +222,10 @@ export default {
       let result = [];
       let i = 0;
       let threshold = this.currentValue;
-      if (this.allowHalf && this.currentValue !== Math.floor(this.currentValue)) {
+      if (
+        this.allowHalf &&
+        this.currentValue !== Math.floor(this.currentValue)
+      ) {
         threshold--;
       }
       for (; i < threshold; i++) {
@@ -223,7 +253,7 @@ export default {
     getMigratingConfig() {
       return {
         props: {
-          'text-template': 'text-template is renamed to score-template.',
+          "text-template": "text-template is renamed to score-template.",
         },
       };
     },
@@ -237,19 +267,28 @@ export default {
         })
         .sort((a, b) => a - b);
       const matchedValue = map[matchedKeys[0]];
-      return isObject(matchedValue) ? matchedValue.value : matchedValue || '';
+      return isObject(matchedValue) ? matchedValue.value : matchedValue || "";
     },
 
     showDecimalIcon(item) {
-      let showWhenDisabled = this.rateDisabled && this.valueDecimal > 0 && item - 1 < this.value && item > this.value;
+      let showWhenDisabled =
+        this.rateDisabled &&
+        this.valueDecimal > 0 &&
+        item - 1 < this.value &&
+        item > this.value;
       /* istanbul ignore next */
       let showWhenAllowHalf =
-        this.allowHalf && this.pointerAtLeftHalf && item - 0.5 <= this.currentValue && item > this.currentValue;
+        this.allowHalf &&
+        this.pointerAtLeftHalf &&
+        item - 0.5 <= this.currentValue &&
+        item > this.currentValue;
       return showWhenDisabled || showWhenAllowHalf;
     },
 
     getIconStyle(item) {
-      const voidColor = this.rateDisabled ? this.disabledVoidColor : this.voidColor;
+      const voidColor = this.rateDisabled
+        ? this.disabledVoidColor
+        : this.voidColor;
       return {
         color: item <= this.currentValue ? this.activeColor : voidColor,
       };
@@ -260,11 +299,11 @@ export default {
         return;
       }
       if (this.allowHalf && this.pointerAtLeftHalf) {
-        this.$emit('input', this.currentValue);
-        this.$emit('change', this.currentValue);
+        this.$emit("input", this.currentValue);
+        this.$emit("change", this.currentValue);
       } else {
-        this.$emit('input', value);
-        this.$emit('change', value);
+        this.$emit("input", value);
+        this.$emit("change", value);
       }
     },
 
@@ -295,8 +334,8 @@ export default {
       currentValue = currentValue < 0 ? 0 : currentValue;
       currentValue = currentValue > this.max ? this.max : currentValue;
 
-      this.$emit('input', currentValue);
-      this.$emit('change', currentValue);
+      this.$emit("input", currentValue);
+      this.$emit("change", currentValue);
     },
 
     setCurrentValue(value, event) {
@@ -306,10 +345,10 @@ export default {
       /* istanbul ignore if */
       if (this.allowHalf) {
         let target = event.target;
-        if (hasClass(target, 'el-rate__item')) {
-          target = target.querySelector('.el-rate__icon');
+        if (hasClass(target, "el-rate__item")) {
+          target = target.querySelector(".el-rate__icon");
         }
-        if (hasClass(target, 'el-rate__decimal')) {
+        if (hasClass(target, "el-rate__decimal")) {
           target = target.parentNode;
         }
         this.pointerAtLeftHalf = event.offsetX * 2 <= target.clientWidth;
@@ -334,7 +373,7 @@ export default {
 
   created() {
     if (!this.value) {
-      this.$emit('input', 0);
+      this.$emit("input", 0);
     }
   },
 };
