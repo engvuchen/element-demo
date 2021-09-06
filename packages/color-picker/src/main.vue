@@ -1,6 +1,10 @@
 <template>
   <div
-    :class="['el-color-picker', colorDisabled ? 'is-disabled' : '', colorSize ? `el-color-picker--${colorSize}` : '']"
+    :class="[
+      'el-color-picker',
+      colorDisabled ? 'is-disabled' : '',
+      colorSize ? `el-color-picker--${colorSize}` : '',
+    ]"
     v-clickoutside="hide"
   >
     <div class="el-color-picker__mask" v-if="colorDisabled"></div>
@@ -12,9 +16,15 @@
             backgroundColor: displayedColor,
           }"
         ></span>
-        <span class="el-color-picker__empty el-icon-close" v-if="!value && !showPanelColor"></span>
+        <span
+          class="el-color-picker__empty el-icon-close"
+          v-if="!value && !showPanelColor"
+        ></span>
       </span>
-      <span class="el-color-picker__icon el-icon-arrow-down" v-show="value || showPanelColor"></span>
+      <span
+        class="el-color-picker__icon el-icon-arrow-down"
+        v-show="value || showPanelColor"
+      ></span>
     </div>
     <picker-dropdown
       ref="dropdown"
@@ -31,17 +41,20 @@
 </template>
 
 <script>
-import Color from './color';
-import PickerDropdown from './components/picker-dropdown.vue';
-import Clickoutside from 'element-demo/src/utils/clickoutside';
-import Emitter from 'element-demo/src/mixins/emitter';
+import Color from "./color";
+import PickerDropdown from "./components/picker-dropdown.vue";
+import Clickoutside from "element-demo/src/utils/clickoutside";
+import Emitter from "element-demo/src/mixins/emitter";
 
 export default {
-  name: 'ElColorPicker',
-
+  name: "ElColorPicker",
   mixins: [Emitter],
 
   props: {
+    /**
+     * 绑定值
+     * @show
+     */
     value: String,
     showAlpha: Boolean,
     colorFormat: String,
@@ -53,10 +66,10 @@ export default {
 
   inject: {
     elForm: {
-      default: '',
+      default: "",
     },
     elFormItem: {
-      default: '',
+      default: "",
     },
   },
 
@@ -65,7 +78,7 @@ export default {
   computed: {
     displayedColor() {
       if (!this.value && !this.showPanelColor) {
-        return 'transparent';
+        return "transparent";
       }
 
       return this.displayedRgb(this.color, this.showAlpha);
@@ -106,9 +119,12 @@ export default {
       });
       currentValueColor.fromString(this.value);
 
-      const currentValueColorRgb = this.displayedRgb(currentValueColor, this.showAlpha);
+      const currentValueColorRgb = this.displayedRgb(
+        currentValueColor,
+        this.showAlpha
+      );
       if (val !== currentValueColorRgb) {
-        this.$emit('active-change', val);
+        this.$emit("active-change", val);
       }
     },
   },
@@ -120,16 +136,16 @@ export default {
     },
     confirmValue() {
       const value = this.color.value;
-      this.$emit('input', value);
-      this.$emit('change', value);
-      this.dispatch('ElFormItem', 'el.form.change', value);
+      this.$emit("input", value);
+      this.$emit("change", value);
+      this.dispatch("ElFormItem", "el.form.change", value);
       this.showPicker = false;
     },
     clearValue() {
-      this.$emit('input', null);
-      this.$emit('change', null);
+      this.$emit("input", null);
+      this.$emit("change", null);
       if (this.value !== null) {
-        this.dispatch('ElFormItem', 'el.form.change', null);
+        this.dispatch("ElFormItem", "el.form.change", null);
       }
       this.showPanelColor = false;
       this.showPicker = false;
@@ -150,11 +166,13 @@ export default {
     },
     displayedRgb(color, showAlpha) {
       if (!(color instanceof Color)) {
-        throw Error('color should be instance of Color Class');
+        throw Error("color should be instance of Color Class");
       }
 
       const { r, g, b } = color.toRgb();
-      return showAlpha ? `rgba(${r}, ${g}, ${b}, ${color.get('alpha') / 100})` : `rgb(${r}, ${g}, ${b})`;
+      return showAlpha
+        ? `rgba(${r}, ${g}, ${b}, ${color.get("alpha") / 100})`
+        : `rgb(${r}, ${g}, ${b})`;
     },
   },
 

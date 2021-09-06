@@ -1,18 +1,21 @@
 <template>
   <form
     class="el-form"
-    :class="[labelPosition ? 'el-form--label-' + labelPosition : '', { 'el-form--inline': inline }]"
+    :class="[
+      labelPosition ? 'el-form--label-' + labelPosition : '',
+      { 'el-form--inline': inline },
+    ]"
   >
     <slot></slot>
   </form>
 </template>
 <script>
-import objectAssign from 'element-demo/src/utils/merge';
+import objectAssign from "element-demo/src/utils/merge";
 
 export default {
-  name: 'ElForm',
+  name: "ElForm",
 
-  componentName: 'ElForm',
+  componentName: "ElForm",
 
   provide() {
     return {
@@ -21,13 +24,17 @@ export default {
   },
 
   props: {
+    /**
+     * 表单数据对象
+     * @show
+     */
     model: Object,
     rules: Object,
     labelPosition: String,
     labelWidth: String,
     labelSuffix: {
       type: String,
-      default: '',
+      default: "",
     },
     inline: Boolean,
     inlineMessage: Boolean,
@@ -64,7 +71,7 @@ export default {
     autoLabelWidth() {
       if (!this.potentialLabelWidthArr.length) return 0;
       const max = Math.max(...this.potentialLabelWidthArr);
-      return max ? `${max}px` : '';
+      return max ? `${max}px` : "";
     },
   },
   data() {
@@ -74,13 +81,13 @@ export default {
     };
   },
   created() {
-    this.$on('el.form.addField', field => {
+    this.$on("el.form.addField", field => {
       if (field) {
         this.fields.push(field);
       }
     });
     /* istanbul ignore next */
-    this.$on('el.form.removeField', field => {
+    this.$on("el.form.removeField", field => {
       if (field.prop) {
         this.fields.splice(this.fields.indexOf(field), 1);
       }
@@ -89,7 +96,9 @@ export default {
   methods: {
     resetFields() {
       if (!this.model) {
-        console.warn('[Element Warn][Form]model is required for resetFields to work.');
+        console.warn(
+          "[Element Warn][Form]model is required for resetFields to work."
+        );
         return;
       }
       this.fields.forEach(field => {
@@ -98,7 +107,7 @@ export default {
     },
     clearValidate(props = []) {
       const fields = props.length
-        ? typeof props === 'string'
+        ? typeof props === "string"
           ? this.fields.filter(field => props === field.prop)
           : this.fields.filter(field => props.indexOf(field.prop) > -1)
         : this.fields;
@@ -108,13 +117,15 @@ export default {
     },
     validate(callback) {
       if (!this.model) {
-        console.warn('[Element Warn][Form]model is required for validate to work!');
+        console.warn(
+          "[Element Warn][Form]model is required for validate to work!"
+        );
         return;
       }
 
       let promise;
       // if no callback, return promise
-      if (typeof callback !== 'function' && window.Promise) {
+      if (typeof callback !== "function" && window.Promise) {
         promise = new window.Promise((resolve, reject) => {
           callback = function (valid) {
             valid ? resolve(valid) : reject(valid);
@@ -130,12 +141,15 @@ export default {
       }
       let invalidFields = {};
       this.fields.forEach(field => {
-        field.validate('', (message, field) => {
+        field.validate("", (message, field) => {
           if (message) {
             valid = false;
           }
           invalidFields = objectAssign({}, invalidFields, field);
-          if (typeof callback === 'function' && ++count === this.fields.length) {
+          if (
+            typeof callback === "function" &&
+            ++count === this.fields.length
+          ) {
             callback(valid, invalidFields);
           }
         });
@@ -147,21 +161,23 @@ export default {
     },
     validateField(props, cb) {
       props = [].concat(props);
-      const fields = this.fields.filter(field => props.indexOf(field.prop) !== -1);
+      const fields = this.fields.filter(
+        field => props.indexOf(field.prop) !== -1
+      );
       if (!fields.length) {
-        console.warn('[Element Warn]please pass correct props!');
+        console.warn("[Element Warn]please pass correct props!");
         return;
       }
 
       fields.forEach(field => {
-        field.validate('', cb);
+        field.validate("", cb);
       });
     },
     getLabelWidthIndex(width) {
       const index = this.potentialLabelWidthArr.indexOf(width);
       // it's impossible
       if (index === -1) {
-        throw new Error('[ElementForm]unpected width ', width);
+        throw new Error("[ElementForm]unpected width ", width);
       }
       return index;
     },
