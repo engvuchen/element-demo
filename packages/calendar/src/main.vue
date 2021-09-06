@@ -65,6 +65,10 @@ export default {
   },
 
   props: {
+    /**
+     * 绑定值
+     * @show
+     */
     value: [Date, String, Number],
     range: {
       type: Array,
