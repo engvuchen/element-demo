@@ -31,6 +31,10 @@ export default {
       type: Number,
       default: 200
     },
+    /**
+     * 触发滚动的对象
+     * @show
+     */
     target: [String],
     right: {
       type: Number,
