@@ -54,6 +54,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    /**
+     * 关闭前的回调，会暂停 Drawer 的关闭
+     * @show
+     */
     beforeClose: {
       type: Function,
     },
@@ -73,6 +77,11 @@ export default {
       type: Boolean,
       default: true,
     },
+    /**
+     * Drawer 打开的方向
+     * @enum 	['rtl', 'ltr', 'ttb', 'btt']
+     * @show
+     */
     direction: {
       type: String,
       default: 'rtl',
@@ -92,10 +101,18 @@ export default {
       type: [Number, String],
       default: '30%',
     },
+    /**
+     * 	Drawer 的标题，也可通过具名 slot 传入
+     * @show
+     */
     title: {
       type: String,
       default: '',
     },
+    /**
+     * 是否显示 Drawer，支持 .sync 修饰符
+     * @show
+     */
     visible: {
       type: Boolean,
     },
