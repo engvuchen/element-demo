@@ -58,7 +58,16 @@ export default {
   },
 
   props: {
+    /**
+     * 图片源，同原生
+     * @show
+     */
     src: String,
+    /**
+     * 确定图片如何适应容器框，同原生 object-fit
+     * @enum ['fill', 'contain', 'cover', 'none', 'scale-down']
+     * @show
+     */
     fit: String,
     lazy: Boolean,
     scrollContainer: {},
