@@ -1,5 +1,5 @@
 {
-  "name": "element-demo",
+  "name": "element-test-demo",
   "version": "1.0.0",
   "description": "配合 vue-ui-kit-helper 演示的 element-ui 精简包",
   "main": "index.js",
